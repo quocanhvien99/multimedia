@@ -1,4 +1,4 @@
-var Chobi = function (elem) {
+var LTU = function (elem) {
 	var context = this;
 	try {
 		var file = elem.files[0];
@@ -8,7 +8,7 @@ var Chobi = function (elem) {
 			img.onload = function () {
 				context.image = img;
 				context.imageData = context.extractImageData();
-				context.debugger('Type matched. input[file]. Saved as [Chobi object]');
+				context.debugger('Type matched. input[file]. Saved as [LTU object]');
 				try {
 					context.onload();
 				} catch (e) {
@@ -24,21 +24,21 @@ var Chobi = function (elem) {
 	}
 };
 
-Chobi.prototype.debug = false;
+LTU.prototype.debug = false;
 
-Chobi.prototype.debugger = function (msg) {
+LTU.prototype.debugger = function (msg) {
 	if (this.debug) {
 		console.log(msg);
 	}
 };
 
-Chobi.prototype.ready = function (onLoadFunc) {
+LTU.prototype.ready = function (onLoadFunc) {
 	this.onload = onLoadFunc;
 };
 
-Chobi.prototype.onload = null;
+LTU.prototype.onload = null;
 
-Chobi.prototype.extractImageData = function () {
+LTU.prototype.extractImageData = function () {
 	var img = this.image;
 	var drawArea = document.createElement('canvas');
 	var ctx = drawArea.getContext('2d');
@@ -49,7 +49,7 @@ Chobi.prototype.extractImageData = function () {
 	return this.imageData;
 };
 
-Chobi.prototype.getColorAt = function (x, y) {
+LTU.prototype.getColorAt = function (x, y) {
 	var index = y * 4 * this.imageData.width + x * 4;
 	var colorData = {
 		red: this.imageData.data[index],
@@ -60,7 +60,7 @@ Chobi.prototype.getColorAt = function (x, y) {
 	return colorData;
 };
 
-Chobi.prototype.setColorAt = function (x, y, obj) {
+LTU.prototype.setColorAt = function (x, y, obj) {
 	var index = y * 4 * this.imageData.width + x * 4;
 	try {
 		this.imageData.data[index] = obj.red;
@@ -73,7 +73,7 @@ Chobi.prototype.setColorAt = function (x, y, obj) {
 	}
 };
 
-Chobi.prototype.blackAndWhite = function () {
+LTU.prototype.blackAndWhite = function () {
 	var imageData = this.imageData;
 	for (var i = 0; i < imageData.width; i++) {
 		for (var j = 0; j < imageData.height; j++) {
@@ -90,7 +90,7 @@ Chobi.prototype.blackAndWhite = function () {
 	return this;
 };
 
-Chobi.prototype.blackAndWhite2 = function () {
+LTU.prototype.blackAndWhite2 = function () {
 	var imageData = this.imageData;
 	for (var i = 0; i < imageData.width; i++) {
 		for (var j = 0; j < imageData.height; j++) {
@@ -107,7 +107,85 @@ Chobi.prototype.blackAndWhite2 = function () {
 	return this;
 };
 
-Chobi.prototype.sepia = function () {
+LTU.prototype.red = function () {
+	var imageData = this.imageData;
+	for (var i = 0; i < imageData.width; i++) {
+		for (var j = 0; j < imageData.height; j++) {
+			var index = j * 4 * imageData.width + i * 4;
+			var red = imageData.data[index];
+			var green = imageData.data[index + 1];
+			var blue = imageData.data[index + 2];
+			var avg = (red + green + blue) / 3;
+			imageData.data[index] = avg;
+			imageData.data[index + 1] = avg;
+			imageData.data[index + 2] = avg;
+		}
+	}
+	return this;
+};
+
+LTU.prototype.red = function () {
+	var imageData = this.imageData;
+	for (var i = 0; i < imageData.width; i++) {
+		for (var j = 0; j < imageData.height; j++) {
+			var index = j * 4 * imageData.width + i * 4;
+			var red = imageData.data[index];
+			imageData.data[index] = red;
+			imageData.data[index + 1] = 0;
+			imageData.data[index + 2] = 0;
+		}
+	}
+	return this;
+};
+
+LTU.prototype.green = function () {
+	var imageData = this.imageData;
+	for (var i = 0; i < imageData.width; i++) {
+		for (var j = 0; j < imageData.height; j++) {
+			var index = j * 4 * imageData.width + i * 4;
+			var green = imageData.data[index + 1];
+			imageData.data[index] = 0;
+			imageData.data[index + 1] = green;
+			imageData.data[index + 2] = 0;
+		}
+	}
+	return this;
+};
+
+LTU.prototype.blue = function () {
+	var imageData = this.imageData;
+	for (var i = 0; i < imageData.width; i++) {
+		for (var j = 0; j < imageData.height; j++) {
+			var index = j * 4 * imageData.width + i * 4;
+			var blue = imageData.data[index + 2];
+			imageData.data[index] = 0;
+			imageData.data[index + 1] = 0;
+			imageData.data[index + 2] = blue;
+		}
+	}
+	return this;
+};
+
+LTU.prototype.opacity = function (amount) {
+	var imageData = this.imageData;
+	for (var i = 0; i < imageData.width; i++) {
+		for (var j = 0; j < imageData.height; j++) {
+			var index = j * 4 * imageData.width + i * 4;
+			var opacity = imageData.data[index + 3];
+			opacity += amount;
+			if (opacity < 0) {
+				opacity = 0;
+			}
+			if (opacity > 255) {
+				opacity = 255;
+			}
+			imageData.data[index + 3] = opacity;
+		}
+	}
+	return this;
+};
+
+LTU.prototype.sepia = function () {
 	var imageData = this.imageData;
 	for (var i = 0; i < imageData.width; i++) {
 		for (var j = 0; j < imageData.height; j++) {
@@ -123,7 +201,7 @@ Chobi.prototype.sepia = function () {
 	return this;
 };
 
-Chobi.prototype.negative = function () {
+LTU.prototype.negative = function () {
 	var imageData = this.imageData;
 	for (var i = 0; i < imageData.width; i++) {
 		for (var j = 0; j < imageData.height; j++) {
@@ -143,16 +221,15 @@ Chobi.prototype.negative = function () {
 	return this;
 };
 
-Chobi.prototype.random = function (min, max) {
+LTU.prototype.random = function (min, max) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-Chobi.prototype.noise = function () {
+LTU.prototype.noise = function () {
 	var imageData = this.imageData;
 	for (var i = 0; i < imageData.width; i++) {
 		for (var j = 0; j < imageData.height; j++) {
 			var index = j * 4 * imageData.width + i * 4;
-			var rindex = i * 4 * imageData.width + j * 4;
 			var randRed = this.random(100, 200);
 			var randGreen = this.random(100, 200);
 			var randBlue = this.random(100, 200);
@@ -167,7 +244,7 @@ Chobi.prototype.noise = function () {
 	return this;
 };
 
-Chobi.prototype.contrast = function (amount) {
+LTU.prototype.contrast = function (amount) {
 	var value = (255.0 + amount) / 255.0;
 	value *= value;
 	var imageData = this.imageData;
@@ -197,11 +274,11 @@ Chobi.prototype.contrast = function (amount) {
 	return this;
 };
 
-Chobi.prototype.map = function (x, min, max, a, b) {
+LTU.prototype.map = function (x, min, max, a, b) {
 	return ((b - a) * (x - min)) / (max - min) + a;
 };
 
-Chobi.prototype.brightness = function (amount) {
+LTU.prototype.brightness = function (amount) {
 	var imageData = this.imageData;
 	amount = this.map(amount, -100, 100, -255, 255);
 	this.debugger(amount);
@@ -228,7 +305,7 @@ Chobi.prototype.brightness = function (amount) {
 	return this;
 };
 
-Chobi.prototype.vintage = function () {
+LTU.prototype.vintage = function () {
 	var imageData = this.imageData;
 	for (var i = 0; i < imageData.width; i++) {
 		for (var j = 0; j < imageData.height; j++) {
@@ -248,16 +325,16 @@ Chobi.prototype.vintage = function () {
 	return this;
 };
 
-Chobi.prototype.crayon = function () {
+LTU.prototype.crayon = function () {
 	this.noise().contrast(500);
 	return this;
 };
-Chobi.prototype.cartoon = function () {
+LTU.prototype.cartoon = function () {
 	this.contrast(400);
 	return this;
 };
 
-Chobi.prototype.resize = function (width, height) {
+LTU.prototype.resize = function (width, height) {
 	if ((width == '' && height == '') || (width == 'auto' && height == 'auto')) {
 		width = this.imageData.width;
 		height = this.imageData.height;
@@ -276,9 +353,9 @@ Chobi.prototype.resize = function (width, height) {
 	return this;
 };
 
-Chobi.prototype.canvas = null;
+LTU.prototype.canvas = null;
 
-Chobi.prototype.loadImageToCanvas = function (drawArea) {
+LTU.prototype.loadImageToCanvas = function (drawArea) {
 	if (drawArea == null && this.canvas != null) {
 		drawArea = this.canvas;
 	}
@@ -294,7 +371,7 @@ Chobi.prototype.loadImageToCanvas = function (drawArea) {
 	}
 };
 
-Chobi.prototype.getImage = function () {
+LTU.prototype.getImage = function () {
 	var tmpCanvas = document.createElement('canvas');
 	var tmpctx = tmpCanvas.getContext('2d');
 	tmpCanvas.width = this.imageData.width;

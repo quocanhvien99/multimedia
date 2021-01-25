@@ -10,7 +10,7 @@
 		/>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="src/Chobi.js"></script>
+		<script type="text/javascript" src="src/LTU.js"></script>
 		<style>
 			/* Set height of the grid so .sidenav can be 100% (adjust if needed) */
 			.row.content {
@@ -74,30 +74,39 @@
 						<button class="btn btn-success" onclick="filter(0)">
 							Black and White
 						</button>
-						<button class="btn btn-success" onclick="filter(10)">
+						<button class="btn btn-success" onclick="filter(12)">
 							Black and White 2
 						</button>
+						<button class="btn btn-success" onclick="filter(4)">Red</button>
+						<button class="btn btn-success" onclick="filter(5)">Green</button>
+						<button class="btn btn-success" onclick="filter(6)">Blue</button>
 						<button class="btn btn-success" onclick="filter(1)">Sepia</button>
 						<button class="btn btn-success" onclick="filter(2)">
 							Negative
 						</button>
 						<button class="btn btn-success" onclick="filter(3)">Vintage</button>
-						<button class="btn btn-success" onclick="filter(9)">Noise</button>
-						<button class="btn btn-success" onclick="filter(11)">Crayon</button>
-						<button class="btn btn-success" onclick="filter(12)">
+						<button class="btn btn-success" onclick="filter(11)">Noise</button>
+						<button class="btn btn-success" onclick="filter(13)">Crayon</button>
+						<button class="btn btn-success" onclick="filter(14)">
 							Cartoonify
 						</button>
-						<button class="btn btn-success" onclick="filter(5)">
+						<button class="btn btn-success" onclick="filter(7)">
 							Brightness +1
 						</button>
-						<button class="btn btn-success" onclick="filter(6)">
+						<button class="btn btn-success" onclick="filter(8)">
 							Brightness -1
 						</button>
-						<button class="btn btn-success" onclick="filter(7)">
+						<button class="btn btn-success" onclick="filter(9)">
 							Contrast +1
 						</button>
-						<button class="btn btn-success" onclick="filter(8)">
+						<button class="btn btn-success" onclick="filter(10)">
 							Contrast -1
+						</button>
+						<button class="btn btn-success" onclick="filter(16)">
+							Opacity -10
+						</button>
+						<button class="btn btn-success" onclick="filter(17)">
+							Opacity +10
 						</button>
 					</div>
 					<input
@@ -118,10 +127,10 @@
 		</footer>
 	</body>
 	<script type="text/javascript">
-		var imgObj = null; //global Chobi object
+		var imgObj = null; //global LTU object
 		function loadImage(elem) {
 			//you should probably check if file is image or not before passing it
-			imgObj = new Chobi(elem);
+			imgObj = new LTU(elem);
 			imgObj.ready(function () {
 				this.canvas = document.getElementById('canvas');
 				this.loadImageToCanvas();
@@ -132,20 +141,23 @@
 		}
 
 		//0 -> Black and white
-		//10 -> Black and white2
+		//12 -> Black and white2
 		//1 -> sepia
 		//2 -> negative
 		//3 -> vintage
-		//4 -> crossprocess
-		//5 -> Brightness increase
-		//6 -> Brightness decrease
-		//7 -> Contrast increase
-		//8 -> Contrast decrease
-		//9 -> Noise Effect
-		//11 -> Crayon effect
-		//12 -> Cartoonify
-		//13 -> Vignette
-		//filter chaining is also possible, like imgObj.brightness(-5).sepia().negative();
+		//4 -> red
+		//5 -> green
+		//6 -> blue
+		//7 -> Brightness increase
+		//8 -> Brightness decrease
+		//9 -> Contrast increase
+		//10 -> Contrast decrease
+		//11 -> noise
+		//13 -> Crayon
+		//14 -> Cartoon
+		//15 -> Vignette
+		//16 -> Opacity increase
+		//16 -> Opacity decrease
 		function filter(id) {
 			if (imgObj == null) {
 				alert('Choose an image first!');
@@ -160,25 +172,33 @@
 			} else if (id == 3) {
 				imgObj.vintage();
 			} else if (id == 4) {
-				imgObj.crossProcess();
+				imgObj.red();
 			} else if (id == 5) {
-				imgObj.brightness(1);
+				imgObj.green();
 			} else if (id == 6) {
-				imgObj.brightness(-1);
+				imgObj.blue();
 			} else if (id == 7) {
-				imgObj.contrast(1);
+				imgObj.brightness(1);
 			} else if (id == 8) {
-				imgObj.contrast(-1);
+				imgObj.brightness(-1);
 			} else if (id == 9) {
-				imgObj.noise();
+				imgObj.contrast(1);
 			} else if (id == 10) {
-				imgObj.blackAndWhite2();
+				imgObj.contrast(-1);
 			} else if (id == 11) {
-				imgObj.crayon();
+				imgObj.noise();
 			} else if (id == 12) {
-				imgObj.cartoon();
+				imgObj.blackAndWhite2();
 			} else if (id == 13) {
+				imgObj.crayon();
+			} else if (id == 14) {
+				imgObj.cartoon();
+			} else if (id == 15) {
 				imgObj.vignette();
+			} else if (id == 16) {
+				imgObj.opacity(-10);
+			} else if (id == 17) {
+				imgObj.opacity(+10);
 			}
 
 			imgObj.loadImageToCanvas();
