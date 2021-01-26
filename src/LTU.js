@@ -113,23 +113,6 @@ LTU.prototype.red = function () {
 		for (var j = 0; j < imageData.height; j++) {
 			var index = j * 4 * imageData.width + i * 4;
 			var red = imageData.data[index];
-			var green = imageData.data[index + 1];
-			var blue = imageData.data[index + 2];
-			var avg = (red + green + blue) / 3;
-			imageData.data[index] = avg;
-			imageData.data[index + 1] = avg;
-			imageData.data[index + 2] = avg;
-		}
-	}
-	return this;
-};
-
-LTU.prototype.red = function () {
-	var imageData = this.imageData;
-	for (var i = 0; i < imageData.width; i++) {
-		for (var j = 0; j < imageData.height; j++) {
-			var index = j * 4 * imageData.width + i * 4;
-			var red = imageData.data[index];
 			imageData.data[index] = red;
 			imageData.data[index + 1] = 0;
 			imageData.data[index + 2] = 0;
@@ -274,13 +257,8 @@ LTU.prototype.contrast = function (amount) {
 	return this;
 };
 
-LTU.prototype.map = function (x, min, max, a, b) {
-	return ((b - a) * (x - min)) / (max - min) + a;
-};
-
 LTU.prototype.brightness = function (amount) {
 	var imageData = this.imageData;
-	amount = this.map(amount, -100, 100, -255, 255);
 	this.debugger(amount);
 	for (var i = 0; i < imageData.width; i++) {
 		for (var j = 0; j < imageData.height; j++) {
@@ -334,25 +312,6 @@ LTU.prototype.cartoon = function () {
 	return this;
 };
 
-LTU.prototype.resize = function (width, height) {
-	if ((width == '' && height == '') || (width == 'auto' && height == 'auto')) {
-		width = this.imageData.width;
-		height = this.imageData.height;
-	}
-	if (width == 'auto') {
-		width = (height / this.imageData.height) * this.imageData.width;
-	} else if (height == 'auto') {
-		height = (width / this.imageData.width) * this.imageData.height;
-	}
-	var oc = document.createElement('canvas');
-	var octx = oc.getContext('2d');
-	oc.width = width;
-	oc.height = height;
-	octx.drawImage(this.getImage(), 0, 0, oc.width, oc.height);
-	this.imageData = octx.getImageData(0, 0, width, height);
-	return this;
-};
-
 LTU.prototype.canvas = null;
 
 LTU.prototype.loadImageToCanvas = function (drawArea) {
@@ -369,15 +328,4 @@ LTU.prototype.loadImageToCanvas = function (drawArea) {
 	} catch (e) {
 		return false;
 	}
-};
-
-LTU.prototype.getImage = function () {
-	var tmpCanvas = document.createElement('canvas');
-	var tmpctx = tmpCanvas.getContext('2d');
-	tmpCanvas.width = this.imageData.width;
-	tmpCanvas.height = this.imageData.height;
-	tmpctx.putImageData(this.imageData, 0, 0);
-	var img = document.createElement('img');
-	img.src = tmpCanvas.toDataURL('image/png');
-	return img;
 };

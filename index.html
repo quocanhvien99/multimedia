@@ -12,18 +12,15 @@
 		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="src/LTU.js"></script>
 		<style>
-			/* Set height of the grid so .sidenav can be 100% (adjust if needed) */
 			.row.content {
-				height: 1500px;
+				height: fit-content;
 			}
 
-			/* Set gray background color and 100% height */
 			.sidenav {
 				background-color: #f1f1f1;
 				height: 100%;
 			}
 
-			/* Set black background color, white text and some padding */
 			footer {
 				background-color: #555;
 				color: white;
@@ -35,7 +32,6 @@
 				height: auto;
 			}
 
-			/* On small screens, set height to 'auto' for sidenav and grid */
 			@media screen and (max-width: 767px) {
 				.sidenav {
 					height: auto;
@@ -129,7 +125,6 @@
 	<script type="text/javascript">
 		var imgObj = null; //global LTU object
 		function loadImage(elem) {
-			//you should probably check if file is image or not before passing it
 			imgObj = new LTU(elem);
 			imgObj.ready(function () {
 				this.canvas = document.getElementById('canvas');
